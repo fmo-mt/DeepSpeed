@@ -18,7 +18,9 @@ class MUSAOpBuilder(OpBuilder):
     def builder(self):
         from torch_musa.utils.musa_extension import MUSAExtension as ExtensionBuilder
 
-        compile_args = {'cxx': self.strip_empty_entries(self.cxx_args())}
+        compile_args = {
+            'cxx': self.strip_empty_entries(self.cxx_args()),
+            'mcc': self.strip_empty_entries(self.mcc_args()),}
 
         cpp_ext = ExtensionBuilder(name=self.absolute_name(),
                                    sources=self.strip_empty_entries(self.sources()),
@@ -30,6 +32,9 @@ class MUSAOpBuilder(OpBuilder):
 
     def cxx_args(self):
         return ['-O3', '-Wno-reorder']
+
+    def mcc_args(self):
+        return ['-O3',]
 
     def libraries_args(self):
         return []

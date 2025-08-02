@@ -172,13 +172,13 @@ class MUSA_Accelerator(DeepSpeedAccelerator):
 
     # TODO(@mt-ai)
     def range_push(self, msg):
-        if hasattr(torch.musa.cnpx, 'range_push'):
-            return torch.musa.cnpx.range_push(msg)
+        if hasattr(torch.musa.mttx, 'range_push'):
+            return torch.musa.mttx.range_push(msg)
 
     # TODO(@mt-ai)
     def range_pop(self):
-        if hasattr(torch.musa.cnpx, 'range_pop'):
-            return torch.musa.cnpx.range_pop()
+        if hasattr(torch.musa.mttx, 'range_pop'):
+            return torch.musa.mttx.range_pop()
 
     def lazy_call(self, callback):
         return torch.musa._lazy_call(callback)
@@ -277,11 +277,12 @@ class MUSA_Accelerator(DeepSpeedAccelerator):
             return self.class_dict['NotImplementedBuilder']
 
     def build_extension(self):
+        import torch_musa
         from torch_musa.utils.musa_extension import BuildExtension
         return BuildExtension
 
     def export_envs(self):
-        return ['NEUWARE_HOME', 'CNCL', 'LD_LIBRARY', 'PATH']
+        return ['MUSA_HOME', 'MCCL', 'LD_LIBRARY', 'PATH']
 
     def visible_devices_envs(self):
         return ['MUSA_VISIBLE_DEVICES']
